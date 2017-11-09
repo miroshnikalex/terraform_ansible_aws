@@ -1,0 +1,57 @@
+---
+- hosts: dev
+  become: yes
+  remote_user: ec2-user
+  gather_facts: yes
+  tasks:
+    - name: Install necessary packages on RHEL based WEB server
+      when: ansible_os_family == "RedHat"
+      package:
+        name: "{{ item }}"
+        state: installed
+      with_items:
+        - httpd
+        - php
+        - php-mysql
+
+    - name: Install necessay packages on Debian based WEB server
+      when: ansible_os_family == "Debian"
+      package:
+        name: "{{ item }}"
+        state: installed
+      with_items:
+        - apache2
+        - php
+        - php-mysql
+
+    - name: Download WordPress
+      get_url:
+        url: http://wordpress.org/wordpress-latest.tar.gz
+        dest: /var/www/html/wordpress.tar.gz
+        force: yes
+    - name: Extract WordPress
+      unarchive:
+        src: /var/www/html/wordpress.tar.gz
+        dst: /var/www/html
+
+    - name: Set permissions to the directory tree
+      file:
+        path: /var/www/html/
+        mode: u=rwX,g=rX,o=rX
+        recurse: yes
+        owner: apache
+        group: apache
+
+    - name: Make sure WEB server is up and running on Debian based system
+      when: ansible_os_family == "Debian"
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Make sure WEB server is up and running on RHEL based system
+      when: ansible_os_family == "RedHat"
+      service:
+        name: httpd
+        state: started
+        enabled: yes
