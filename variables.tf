@@ -61,3 +61,55 @@ variable "key_pair_name" {
 variable "public_key_path" {
   default = ""
 }
+
+variable "domain_name" {
+  default = ""
+}
+
+variable "dev_instance_type" {
+  default = "t2.micro"
+}
+
+variable "dev_ami" {
+  default = ""
+}
+
+variable "elb_healthy_threshold" {
+  default = "5"
+}
+
+variable "elb_unhealthy_threshold" {
+  default = "5"
+}
+
+variable "healthcheck_timeout" {
+  default = "5"
+}
+
+variable "healthcheck_interval" {
+  default = "5"
+}
+
+variable "lc_instance_type" {
+  default = "t2.micro"
+}
+
+variable "asg_max_size" {
+  default = "3"
+}
+
+variable "asg_min_size" {
+  default = "1"
+}
+
+variable "asg_grace" {
+  default = ""
+}
+
+variable "asg_check_type" {
+  default = ""
+}
+
+variable "asg_desired_capacity" {
+  default = ""
+}
